@@ -26,6 +26,7 @@ using MouseKeyboardActivityMonitor;
 using MouseKeyboardActivityMonitor.WinApi;
 using System.Windows.Media;
 using System.Windows.Controls.Primitives;
+using MoonPdfLib.Helper;
 
 namespace MoonPdfLib
 {
@@ -93,6 +94,13 @@ namespace MoonPdfLib
 
 		void source_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
 		{
+            if (this.source.StatedManager.State == ContentState.UnLoaded)
+            {
+				/*
+				 * 不处理鼠标的事件
+				 */
+				return;
+            }
 			var ctrlDown = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
 
 			if (ctrlDown || e.RightButton == MouseButtonState.Pressed)

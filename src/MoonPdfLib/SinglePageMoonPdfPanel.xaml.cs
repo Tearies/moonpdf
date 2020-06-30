@@ -92,6 +92,13 @@ namespace MoonPdfLib
 
 		void IMoonPdfPanel.GotoPage(int pageNumber)
 		{
+            if (this.parent.StatedManager.State == ContentState.UnLoaded)
+            {
+                /*
+                 * Pdf没有加载时 不处理任何事件
+                 */
+                return;
+            }
 			currentPageIndex = pageNumber - 1;
 			this.SetItemsSource();
 
@@ -101,6 +108,13 @@ namespace MoonPdfLib
 
 		void IMoonPdfPanel.GotoPreviousPage()
 		{
+            if (this.parent.StatedManager.State == ContentState.UnLoaded)
+            {
+                /*
+                 * Pdf没有加载时 不处理任何事件
+                 */
+                return;
+            }
 			var prevPageIndex = PageHelper.GetPreviousPageIndex(this.currentPageIndex, this.parent.ViewType);
 
 			if (prevPageIndex == -1)
@@ -116,6 +130,13 @@ namespace MoonPdfLib
 
 		void IMoonPdfPanel.GotoNextPage()
 		{
+            if (this.parent.StatedManager.State == ContentState.UnLoaded)
+            {
+                /*
+                 * Pdf没有加载时 不处理任何事件
+                 */
+                return;
+            }
 			var nextPageIndex = PageHelper.GetNextPageIndex(this.currentPageIndex, this.parent.TotalPages, this.parent.ViewType);
 
 			if (nextPageIndex == -1)
@@ -131,12 +152,26 @@ namespace MoonPdfLib
 
 		private void SetItemsSource()
 		{
+            if (this.parent.StatedManager.State == ContentState.UnLoaded)
+            {
+                /*
+                 * Pdf没有加载时 不处理任何事件
+                 */
+                return;
+            }
 			var startIndex = PageHelper.GetVisibleIndexFromPageIndex( this.currentPageIndex, this.parent.ViewType);
 			this.itemsControl.ItemsSource = this.imageProvider.FetchRange(startIndex, this.parent.GetPagesPerRow()).FirstOrDefault();
 		}
 
 		public int GetCurrentPageIndex(ViewType viewType)
 		{
+            if (this.parent.StatedManager.State == ContentState.UnLoaded)
+            {
+                /*
+                 * Pdf没有加载时 不处理任何事件
+                 */
+                return 0;
+            }
 			return this.currentPageIndex;
 		}
 
@@ -154,6 +189,13 @@ namespace MoonPdfLib
 
 		public void ZoomToWidth()
 		{
+            if (this.parent.StatedManager.State == ContentState.UnLoaded)
+            {
+                /*
+                 * Pdf没有加载时 不处理任何事件
+                 */
+                return;
+            }
 			var scrollBarWidth = this.scrollViewer.ComputedVerticalScrollBarVisibility == System.Windows.Visibility.Visible ? SystemParameters.VerticalScrollBarWidth : 0;
 			var zoomFactor = (this.parent.ActualWidth - scrollBarWidth) / this.parent.PageRowBounds[this.currentPageIndex].SizeIncludingOffset.Width;
 			var pageBound = this.parent.PageRowBounds[this.currentPageIndex];
@@ -169,6 +211,13 @@ namespace MoonPdfLib
 
 		public void ZoomToHeight()
 		{
+            if (this.parent.StatedManager.State == ContentState.UnLoaded)
+            {
+                /*
+                 * Pdf没有加载时 不处理任何事件
+                 */
+                return;
+            }
 			var scrollBarHeight = this.scrollViewer.ComputedHorizontalScrollBarVisibility == System.Windows.Visibility.Visible ? SystemParameters.HorizontalScrollBarHeight : 0;
 			var zoomFactor = (this.parent.ActualHeight - scrollBarHeight) / this.parent.PageRowBounds[this.currentPageIndex].SizeIncludingOffset.Height;
 			var pageBound = this.parent.PageRowBounds[this.currentPageIndex];
@@ -198,6 +247,13 @@ namespace MoonPdfLib
 
 		private void ZoomInternal(double zoomFactor)
 		{
+            if (this.parent.StatedManager.State == ContentState.UnLoaded)
+            {
+                /*
+                 * Pdf没有加载时 不处理任何事件
+                 */
+                return;
+            }
 			if (zoomFactor > this.parent.MaxZoomFactor)
 				zoomFactor = this.parent.MaxZoomFactor;
 			else if (zoomFactor < this.parent.MinZoomFactor)
